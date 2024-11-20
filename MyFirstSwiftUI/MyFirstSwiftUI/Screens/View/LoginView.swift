@@ -157,3 +157,109 @@ struct LoginView: View {
 #Preview {
 	LoginView()
 }
+struct HomeView: View {
+	@StateObject private var viewModel = HomeViewModel()
+	
+	var body: some View {
+		NavigationView {
+			List {
+				Section(header: Text("Trending")) {
+					ForEach(viewModel.trendingMovies) { movie in
+						NavigationLink(destination: MovieDetailView(movie: movie)) {
+							MovieRow(movie: movie)
+						}
+					}
+				}
+				
+				Section(header: Text("Popular")) {
+					ForEach(viewModel.popularMovies) { movie in
+						NavigationLink(destination: MovieDetailView(movie: movie)) {
+							MovieRow(movie: movie)
+						}
+					}
+				}
+			}
+			.navigationTitle("Movies")
+			.onAppear {
+				viewModel.loadTrendingMovies()
+				viewModel.loadPopularMovies()
+			}
+		}
+	}
+}
+
+struct MovieDetailView: View {
+	let movie: Movie
+	@State private var isFavorite = false
+	
+	var body: some View {
+		ScrollView {
+			VStack(alignment: .leading, spacing: 10) {
+				Text(movie.title).font(.title)
+				Text(movie.overview).font(.body)
+				Button(action: toggleFavorite) {
+					Text(isFavorite ? "Unfavorite" : "Favorite")
+				}
+			}
+			.padding()
+		}
+		.onAppear {
+			loadFavoriteStatus()
+		}
+	}
+	
+	private func toggleFavorite() {
+		isFavorite.toggle()
+		// Save favorite status
+	}
+	
+	private func loadFavoriteStatus() {
+		// Load favorite status
+	}
+}
+
+struct MovieRow: View {
+	let movie: Movie
+
+	var body: some View {
+		HStack {
+			// Load movie poster
+			if let posterPath = movie.posterPath {
+				AsyncImage(url: URL(string: "https://image.tmdb.org/t/p/w500" + posterPath)) { image in
+					image.resizable()
+						.frame(width: 50, height: 75)
+						.cornerRadius(8)
+				} placeholder: {
+					Color.gray
+						.frame(width: 50, height: 75)
+						.cornerRadius(8)
+				}
+			}
+			
+			VStack(alignment: .leading) {
+				Text(movie.title)
+					.font(.headline)
+				Text(movie.releaseDate)
+					.font(.subheadline)
+					.foregroundColor(.gray)
+			}
+		}
+	}
+}
+struct OtherView1: View {
+  var body: some View {
+	Text("Tab 1 Content")
+  }
+}
+
+struct OtherView2: View {
+  var body: some View {
+	Text("Tab 2 Content")
+  }
+}
+
+struct OtherView3: View {
+  var body: some View {
+	Text("Tab 3 Content")
+  }
+}

@@ -2,7 +2,7 @@
 //  MyFirstSwiftUIApp.swift
 //  MyFirstSwiftUI
 //
-//  Created by Siddharth on 14/11/24.
+//  Created by Siddharth on 20/11/24.
 //
 
 import SwiftUI
@@ -11,7 +11,8 @@ struct LoginView: View {
 	
 	@State private var email: String = ""
 	@State private var password: String = ""
-	
+	@EnvironmentObject var router: Router
+
 	var body: some View {
 		ScrollView {
 			VStack(spacing: 16) {
@@ -83,8 +84,7 @@ struct LoginView: View {
 	
 	private var loginButton: some View {
 		Button {
-			Task {
-			}
+			router.navigate(to: .signUP)
 		} label: {
 			Text("Sign in")
 		}
@@ -142,6 +142,7 @@ struct LoginView: View {
 	
 	private var footerView: some View {
 		Button {
+			router.navigate(to: .signUP)
 		} label: {
 			HStack {
 				Text("No account yet?")
